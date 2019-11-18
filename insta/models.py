@@ -82,3 +82,21 @@ class Image(models.Model):
 
     class Meta:
         ordering = ['-date_posted']    
+
+
+class Comment(models.Model):
+    comment = HTMLField()
+    posted_on = models.DateTimeField(auto_now=True)
+    image = models.ForeignKey(Image, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def save_comment(self):
+        self.save()
+    
+    def save_comment(self):
+        self.save()
+    
+    @classmethod
+    def get_comments_by_images(cls, id):
+        comments = Comment.objects.filter(image__pk = id)
+        return comments
