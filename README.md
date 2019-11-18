@@ -24,6 +24,7 @@
 |-------------|--------------------------------|-------------|
 |User wants to upload a photo|Select image| Add a caption|
 |------------------|-----------------------|---------------|
+|Add a comment| Click on the comment icon| Write a comment|
 
 ## Bugs
 - Follow function is not yet implemented.
