@@ -27,3 +27,25 @@ def register(request):
 
 def home(request):
     return render(request, 'base.html')
+
+
+@login_required(login_url='/accounts/login/')
+def all_images(request):
+    all_users = User.objects.all()
+    all_images = Image.objects.all()
+    next = request.GET.get('next')
+    if next: return redirect(next)
+    return render(request, 'images.html',  {"all_images": all_images, "all_users":all_users})
+
+
+def profile(request, username):
+    profile = User.objects.get(username=username)
+    try:
+        profile_details = Profile.get_by_id(profile.id)
+    except:
+        profile_details = Profile.filter_by_id(profile.id)
+    user_images = Image.get_profile_images(profile.id)
+
+    return render(request, 'profiles/profile.html', {'profile':profile, 'profile_details':profile_details, 'user_images':user_images})
+
+
