@@ -84,3 +84,50 @@ def edit_profile(request):
 
 
 @login_required(login_url='/accounts/login')
+
+
+def profile_update(request):
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        p_form = ProfileUpdateForm(request.POST,request.FILES, instance=request.user.profile)
+
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+            return redirect('all_images')
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=request.user.profile)
+
+    context = {
+        'u_form':u_form,
+        'p_form':p_form
+    }
+    
+    return render(request, 'profiles/profile_update.html', {'u_form':u_form, "p_form": p_form})
+
+
+@login_required(login_url='/login')
+def post_image(request):
+    current_user = request.user
+    if request.method == 'POST':
+        form = PostIMageForm(request.POST, request.FILES)
+        if form.is_valid():
+            image = form.save(commit=False)
+            image.profile = current_user
+            image.save()
+        return redirect('all_images')
+    else:
+        form = PostIMageForm(auto_id=False)
+    return render(request, 'upload_image.html', {"form": form})
+
+def search(request):
+    if 'search' in request.GET and request.GET['search']:
+        search_term = request.GET.get('search')
+        profiles = Profile.search_profile(search_term)
+        message = f'{search_term}'
+
+        return render(request, 'search.html',{'message':message, 'profiles':profiles})
+    else:
+        message = 'an empty search term!'
+        return render(request, 'search.html', {'message':message})
