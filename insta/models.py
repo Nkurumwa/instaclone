@@ -41,3 +41,44 @@ class Profile(models.Model):
     def filter_by_id(cls, id):
         profile = Profile.objects.filter(user = id).first()
         return profile
+
+
+class Image(models.Model):
+    image = models.ImageField(upload_to='images/')
+    image_name = models.CharField(max_length=20, blank=True)
+    image_caption = models.CharField(max_length=100)
+    likes = models.BooleanField(default=False)
+    date_posted = models.DateTimeField(default=timezone.now)
+    profile = models.ForeignKey(User, on_delete=models.CASCADE, default='1')
+
+    def __str__(self):
+        return self.image_caption
+
+    def save_image(self):
+        self.save()
+
+    def delete_image(self):
+        self.delete()
+
+    
+    @classmethod
+    def update_caption(cls, update):
+        pass
+    
+    @classmethod
+    def get_image_id(cls, id):
+        image = Image.objects.get(pk=id)
+        return image
+    
+    @classmethod
+    def get_profile_images(cls, profile):
+        images = Image.objects.filter(profile__pk = profile)
+        return images
+    
+    @classmethod
+    def get_all_images(cls):
+        images = Image.objects.all()
+        return images
+
+    class Meta:
+        ordering = ['-date_posted']    
