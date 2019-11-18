@@ -13,6 +13,7 @@ def register(request):
             form.save()
             username = form.cleaned_data.get('username')
 
+
             return redirect('/accounts/login/')
             
     else:
@@ -21,7 +22,7 @@ def register(request):
 
 
 def home(request):
-    return render(request, 'images.html')
+    return render(request, 'base.html')
 
 
 @login_required(login_url='/accounts/login/')
