@@ -22,7 +22,7 @@ def register(request):
 
 
 def home(request):
-    return render(request, 'base.html')
+    return render(request, 'images.html')
 
 
 @login_required(login_url='/accounts/login/')
